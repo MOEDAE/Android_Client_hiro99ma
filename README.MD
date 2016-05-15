@@ -1,6 +1,10 @@
 # Bluetooth Developer Studio
 
-## Example Plugin - Android
+## Example Plugin - Android hiro99ma改造版
+
+* ベースは、[Bluetooth SIGのAndroid Plugin](https://www.bluetooth.com/develop-with-bluetooth/developer-resources-tools/bluetooth-developer-plugins)
+* 改行コードをLF
+* 空行をなるべく削除
 
 ### Author: Martin Woolley, Bluetooth SIG - Twitter: @bluetooth_mdw
 

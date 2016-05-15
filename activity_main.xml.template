@@ -35,5 +35,4 @@
          android:onClick="onScan"
          android:text="Scan" />
 
-
 </LinearLayout>

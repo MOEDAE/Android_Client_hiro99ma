@@ -1,8 +1,8 @@
 ﻿function GetInfo(infoObject) {
-    infoObject.Name = "Android Client Plugin";
+    infoObject.Name = "Android Client Plugin(hiro99ma)";
     infoObject.Description = "Generates code for Android smart phone applications";
     infoObject.Author = "Martin Woolley";
-    infoObject.Version = "1.1";
+    infoObject.Version = "1.1ext";
     infoObject.IsClient = true;
     return infoObject;
 }
@@ -10,12 +10,12 @@
 function RunPlugin(profiledata)
 {
     log("Android Client Plugin: Beginning plugin execution");
-	
-	
+
+
 	var namespace = profiledata.CustomNameSpace;
 	var namespace_as_dir = namespace.replace(/\./g,"\\");
 	var rx_custom_namespace_tag = new RegExp("{{CustomNameSpace}}","g");
-    
+
     var mainActivityTemplate = FileManager.ReadFile("MainActivity.java.template");
     var main_activity = ProcessTemplate(mainActivityTemplate, profiledata);
     FileManager.CreateFile("MainActivity.java", main_activity);
@@ -39,7 +39,7 @@ function RunPlugin(profiledata)
 									   '_CHARACTERISTIC_UUID = "' +
 			                           uniqueUUIDItem.UUID.toUpperCase() +
 									   '";' +
-									   '\r\n';
+									   '\n';
 		} else {
 			if (uniqueUUIDItem.Type.indexOf(".service.") > 0) {
 			service_constants = service_constants + '    public static final String ' +
@@ -47,14 +47,14 @@ function RunPlugin(profiledata)
 									   '_SERVICE_UUID = "' +
 			                           uniqueUUIDItem.UUID.toUpperCase() +
 									   '";' +
-									   '\r\n';
+									   '\n';
 			}
 		}
     }
 	adapter_service = adapter_service.replace(/%%SERVICE_CONSTANTS%%/g, service_constants);
 	adapter_service = adapter_service.replace(/%%CHARACTERISTIC_CONSTANTS%%/g, characteristic_constants);
     FileManager.CreateFile("BleAdapterService.java", adapter_service);
-	
+
     var peripheralActivityTemplate = FileManager.ReadFile("PeripheralControlActivity.java.template");
     var peripheral_activity = ProcessTemplate(peripheralActivityTemplate, profiledata);
     FileManager.CreateFile("PeripheralControlActivity.java", peripheral_activity);
@@ -80,13 +80,13 @@ function RunPlugin(profiledata)
 									   '">Characteristic: ' +
 									   uniqueUUIDItem.Name +
 									   '</string>'+
-									   '\r\n';
+									   '\n';
 			characteristic_constants = characteristic_constants + '    <string name="characteristic_uuid_' +
 			                           uniqueUUIDItem.UUID.toUpperCase() +
 									   '">Characteristic: ' +
 									   uniqueUUIDItem.UUID.toUpperCase() +
 									   '</string>'+
-									   '\r\n';
+									   '\n';
 		} else {
 			if (uniqueUUIDItem.Type.indexOf(".service.") > 0) {
 				service_constants = service_constants + '    <string name="service_name_' +
@@ -94,13 +94,13 @@ function RunPlugin(profiledata)
 										   '">Service: ' +
 										   uniqueUUIDItem.Name +
 										   '</string>'+
-										   '\r\n';
+										   '\n';
 				service_constants = service_constants + '    <string name="service_uuid_' +
 										   uniqueUUIDItem.UUID.toUpperCase() +
 										   '">Service: ' +
 										   uniqueUUIDItem.UUID.toUpperCase() +
 										   '</string>'+
-										   '\r\n';
+										   '\n';
 			}
 		}
     }
@@ -115,7 +115,7 @@ function RunPlugin(profiledata)
     FileManager.CreateFile("activity_peripheral_control.xml", activity_peripheral_control_xml);
 
     var utilityTemplate = FileManager.ReadFile("Utility.java.template");
-    var utility = ProcessTemplate(utilityTemplate, profiledata);	
+    var utility = ProcessTemplate(utilityTemplate, profiledata);
     FileManager.CreateFile("Utility.java", utility);
 
     var charPropsTemplate = FileManager.ReadFile("CharacteristicProperties.java.template");

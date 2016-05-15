@@ -36,43 +36,41 @@ import android.util.Log;
 
 public class MainActivity extends Activity {
 
-	private BluetoothAdapter mBluetoothAdapter = null;
-	private static final int REQUEST_LOCATION = 0;
-	private static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_COARSE_LOCATION};
-	private BluetoothLeScanner scanner = null;
-	private boolean permissions_granted=false;
-	private boolean mScanning = false;
-	private Handler mHandler = new Handler();
-	private ListAdapter mLeDeviceListAdapter;
+    private static final int REQUEST_LOCATION = 0;
+    private static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_COARSE_LOCATION};
+    private static final long SCAN_TIMEOUT = 5000;
 
-	private static final long SCAN_TIMEOUT = 5000;
+    private BluetoothAdapter mBluetoothAdapter = null;
+    private BluetoothLeScanner scanner = null;
+    private boolean permissions_granted=false;
+    private boolean mScanning = false;
+    private Handler mHandler = new Handler();
+    private ListAdapter mLeDeviceListAdapter;
 
-	static class ViewHolder {
-		public TextView text;
 
-	}
+    static class ViewHolder {
+        public TextView text;
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.activity_main);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setContentView(R.layout.activity_main);
 
-		// Initializes Bluetooth adapter.
-		final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-		mBluetoothAdapter = bluetoothManager.getAdapter();
+        // Initializes Bluetooth adapter.
+        final BluetoothManager bluetoothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
 
-		mLeDeviceListAdapter = new ListAdapter();
+        mLeDeviceListAdapter = new ListAdapter();
 
-		ListView listView = (ListView) this.findViewById(R.id.deviceList);
-		listView.setAdapter(mLeDeviceListAdapter);
+        ListView listView = (ListView)this.findViewById(R.id.deviceList);
+        listView.setAdapter(mLeDeviceListAdapter);
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
+        listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mScanning) {
                     setScanState(false);
                     scanner.stopScan(mLeScanCallback);
@@ -82,18 +80,17 @@ public class MainActivity extends Activity {
                 intent.putExtra(PeripheralControlActivity.EXTRA_NAME, device.getName());
                 intent.putExtra(PeripheralControlActivity.EXTRA_ID, device.getAddress());
                 startActivity(intent);
-
             }
         });
-	}
+    }
 
-	public void onScan(View view) {
-		// check bluetooth is available on on
-		if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-			Intent enableBtIntent = new Intent(	BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivity(enableBtIntent);
-			return;
-		}
+    public void onScan(View view) {
+        // check bluetooth is available on on
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBtIntent);
+            return;
+        }
         Log.d(Constants.TAG, "Bluetooth is switched on");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -116,17 +113,17 @@ public class MainActivity extends Activity {
                 scanner.stopScan(mLeScanCallback);
             }
         }
-	}
+    }
 
-	private void setScanState(boolean value) {
-		mScanning = value;
-		((Button) this.findViewById(R.id.scanButton)).setText(value ? "Stop" : "Scan");
+    private void setScanState(boolean value) {
+        mScanning = value;
+        ((Button)this.findViewById(R.id.scanButton)).setText(value ? "Stop" : "Scan");
         if (mScanning) {
             showMsg("Scanning...");
         } else {
             showMsg("");
         }
-	}
+    }
 
     private void requestLocationPermission() {
         Log.i(Constants.TAG, "Location permission has NOT yet been granted. Requesting permission.");
@@ -158,7 +155,7 @@ public class MainActivity extends Activity {
                 Log.i(Constants.TAG, "Location permission has now been granted. Scanning.....");
                 permissions_granted = true;
                 scanLeDevices();
-            }else{
+            } else {
                 Log.i(Constants.TAG, "Location permission was NOT granted.");
                 showMsg("Required permissions not granted so cannot start");
             }
@@ -166,101 +163,98 @@ public class MainActivity extends Activity {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-	private void scanLeDevices() {
-		scanner = mBluetoothAdapter.getBluetoothLeScanner();
-		List<ScanFilter> filters;
-		filters = new ArrayList<ScanFilter>();
-		ScanFilterFactory filter_factory = ScanFilterFactory.getInstance();
-		filters.add(filter_factory.getScanFilter());
-		ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
-		if (permissions_granted) {
+    private void scanLeDevices() {
+        scanner = mBluetoothAdapter.getBluetoothLeScanner();
+        List<ScanFilter> filters;
+        filters = new ArrayList<ScanFilter>();
+        ScanFilterFactory filter_factory = ScanFilterFactory.getInstance();
+        filters.add(filter_factory.getScanFilter());
+        ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
+        if (permissions_granted) {
             setScanState(true);
-			scanner.startScan(filters, settings, mLeScanCallback);
-		} else {
-			Log.d(Constants.TAG,"Application lacks permission to start Bluetooth scanning");
+            scanner.startScan(filters, settings, mLeScanCallback);
+        } else {
+            Log.d(Constants.TAG,"Application lacks permission to start Bluetooth scanning");
             showMsg("Required permissions not granted so cannot start");
-		}
-	}
+        }
+    }
 
-	private ScanCallback mLeScanCallback = new ScanCallback() {
-
-		public void onScanResult(int callbackType, final ScanResult result) {
-
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					mLeDeviceListAdapter.addDevice(result.getDevice());
-					mLeDeviceListAdapter.notifyDataSetChanged();
-				}
-			});
-		}
-	};
+    private ScanCallback mLeScanCallback = new ScanCallback() {
+        public void onScanResult(int callbackType, final ScanResult result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mLeDeviceListAdapter.addDevice(result.getDevice());
+                    mLeDeviceListAdapter.notifyDataSetChanged();
+                }
+            });
+        }
+    };
 
     private void showMsg(String msg) {
         Log.d(Constants.TAG, msg);
         ((TextView) MainActivity.this.findViewById(R.id.msgTextView)).setText(msg);
     }
 
-	// adaptor
-	private class ListAdapter extends BaseAdapter {
-		private ArrayList<BluetoothDevice> mLeDevices;
+    // adaptor
+    private class ListAdapter extends BaseAdapter {
+        private ArrayList<BluetoothDevice> mLeDevices;
 
-		public ListAdapter() {
-			super();
-			mLeDevices = new ArrayList<BluetoothDevice>();
+        public ListAdapter() {
+            super();
+            mLeDevices = new ArrayList<BluetoothDevice>();
+        }
 
-		}
+        public void addDevice(BluetoothDevice device) {
+            if (!mLeDevices.contains(device)) {
+                mLeDevices.add(device);
+            }
+        }
 
-		public void addDevice(BluetoothDevice device) {
-			if (!mLeDevices.contains(device)) {
-				mLeDevices.add(device);
-			}
-		}
+        public BluetoothDevice getDevice(int position) {
+            return mLeDevices.get(position);
+        }
 
-		public BluetoothDevice getDevice(int position) {
-			return mLeDevices.get(position);
-		}
+        public void clear() {
+            mLeDevices.clear();
+        }
 
-		public void clear() {
-			mLeDevices.clear();
-		}
+        @Override
+        public int getCount() {
+            return mLeDevices.size();
+        }
 
-		@Override
-		public int getCount() {
-			return mLeDevices.size();
-		}
+        @Override
+        public Object getItem(int i) {
+            return mLeDevices.get(i);
+        }
 
-		@Override
-		public Object getItem(int i) {
-			return mLeDevices.get(i);
-		}
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
 
-		@Override
-		public long getItemId(int i) {
-			return i;
-		}
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder viewHolder;
+            // General ListView optimization code.
+            if (view == null) {
+                view = MainActivity.this.getLayoutInflater().inflate(R.layout.list_row, null);
+                viewHolder = new ViewHolder();
+                viewHolder.text = (TextView)view.findViewById(R.id.textView);
+                view.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder)view.getTag();
+            }
+            BluetoothDevice device = mLeDevices.get(i);
+            final String deviceName = device.getName();
+            if ((deviceName != null) && (deviceName.length() > 0)) {
+                viewHolder.text.setText(deviceName);
+            } else {
+                viewHolder.text.setText("unknown device");
+            }
 
-		@Override
-		public View getView(int i, View view, ViewGroup viewGroup) {
-			ViewHolder viewHolder;
-			// General ListView optimization code.
-			if (view == null) {
-				view = MainActivity.this.getLayoutInflater().inflate(
-						R.layout.list_row, null);
-				viewHolder = new ViewHolder();
-				viewHolder.text = (TextView) view.findViewById(R.id.textView);
-				view.setTag(viewHolder);
-			} else {
-				viewHolder = (ViewHolder) view.getTag();
-			}
-			BluetoothDevice device = mLeDevices.get(i);
-			final String deviceName = device.getName();
-			if (deviceName != null && deviceName.length() > 0)
-				viewHolder.text.setText(deviceName);
-			else
-				viewHolder.text.setText("unknown device");
-
-			return view;
-		}
-	}
+            return view;
+        }
+    }
 }

@@ -20,7 +20,7 @@ public class ScanFilterFactory {
     }
 
     public ScanFilter getScanFilter() {
-{%- if GAPProperties.DeviceNameAdvertise == 'true' -%}          
+{%- if GAPProperties.DeviceNameAdvertise == 'true' -%}
         String device_name = "{{GAPProperties.DeviceName}}";
         return new ScanFilter.Builder().setDeviceName(device_name).build();
 {%- else -%}

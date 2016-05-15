@@ -1,7 +1,7 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/deviceView"
     android:layout_width="fill_parent"
@@ -16,25 +16,25 @@
         android:layout_height="wrap_content"
         android:background="@drawable/border"
         android:orientation="vertical">
-        
-	    <TextView
-	        android:id="@+id/nameTextView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginTop="15dp"
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
           android:paddingLeft="10dip"
-	        android:text="Device name: " />
-	
-	    <TextView
-	        android:id="@+id/rssiTextView"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"
-	        android:layout_marginBottom="10dp"
+            android:text="Device name: " />
+
+        <TextView
+            android:id="@+id/rssiTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
           android:paddingLeft="10dip"
-	        android:text="RSSI" />
-	        
+            android:text="RSSI" />
+
       <Button
           android:id="@+id/button_connect"
           android:layout_width="wrap_content"
@@ -51,13 +51,11 @@
             android:layout_marginBottom="10dp"
             android:paddingLeft="10dip"
             android:text="" />
-
-	        
     </LinearLayout>
 
-	{%- for service in Services -%}
+    {%- for service in Services -%}
 
-	{%- assign service_num = {{forloop.index0}} -%}
+    {%- assign service_num = {{forloop.index0}} -%}
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
@@ -81,32 +79,34 @@
             android:text="@string/service_uuid_{{service.UUID | Remove:"-"}}" />
 
     {%- for characteristic in service.Characteristics -%}
-    
-        {% assign read_supported = false %}
+        {%- assign read_supported = false -%}
         {%- for property in characteristic.Properties -%}
-          {%- if property.Read == 'Mandatory' -%}          
-              {% assign read_supported = true %}
+          {%- if property.Read == 'Mandatory' -%}
+              {%- assign read_supported = true -%}
           {%- endif -%}
         {%- endfor -%}
-
-        {% assign write_supported = false %}
+        {%- assign write_supported = false -%}
         {%- for property in characteristic.Properties -%}
-          {%- if property.Write == 'Mandatory' -%}          
-              {% assign write_supported = true %}
+          {%- if property.Write == 'Mandatory' -%}
+              {%- assign write_supported = true -%}
           {%- endif -%}
         {%- endfor -%}
-
-        {% assign write_wor_supported = false %}
+        {%- assign write_wor_supported = false -%}
         {%- for property in characteristic.Properties -%}
-          {%- if property.WriteWithoutResponse == 'Mandatory' -%}          
-              {% assign write_wor_supported = true %}
+          {%- if property.WriteWithoutResponse == 'Mandatory' -%}
+              {%- assign write_wor_supported = true -%}
           {%- endif -%}
         {%- endfor -%}
-
-        {% assign notify_supported = false %}
+        {%- assign notify_supported = false -%}
         {%- for property in characteristic.Properties -%}
-          {%- if property.Notify == 'Mandatory' -%}          
-              {% assign notify_supported = true %}
+          {%- if property.Notify == 'Mandatory' -%}
+              {%- assign notify_supported = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign indicate_supported = false -%}
+        {%- for property in characteristic.Properties -%}
+          {%- if property.Indicate == 'Mandatory' -%}
+              {%- assign indicate_supported = true -%}
           {%- endif -%}
         {%- endfor -%}
 
@@ -134,81 +134,88 @@
                 android:paddingLeft="20dip"
                 android:text="{{characteristic.Properties[0].Astext | Remove:"-"}}" />
 
-{% if write_supported or write_wor_supported or read_supported or notify_supported %}
-
+{%- if write_supported or write_wor_supported or read_supported or notify_supported or indicate_supported -%}
   {%- if write_supported or write_wor_supported -%}
+
             <EditText
                 android:id="@+id/text_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
                 android:layout_width="fill_parent"
                 android:paddingLeft="20dip"
                 android:paddingRight="20dip"
                 android:background="#E4FEFD"
-	              android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
                 android:enabled="false"
                 android:layout_height="wrap_content" />
   {%- endif -%}
-
   {%- if read_supported and write_supported != true and write_wor_supported != true -%}
+
             <TextView
                 android:id="@+id/text_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dip"
                 android:paddingRight="20dip"
-	              android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
                 android:background="#E4FEFD"
                 android:text="" />
   {%- endif -%}
-               
+
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
                 {%- if read_supported -%}
-		            <Button
-		                android:id="@+id/button_read_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:paddingLeft="20dip"
-		                android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
-		                android:enabled="false"
-                    android:onClick="onRead"
-		                android:text="Read" />
-                {%- endif -%}
 
+                    <Button
+                        android:id="@+id/button_read_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dip"
+                        android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:enabled="false"
+                        android:onClick="onRead"
+                        android:text="Read" />
+                {%- endif -%}
                 {%- if write_supported or write_wor_supported -%}
-		            <Button
-		                android:id="@+id/button_write_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:paddingLeft="20dip"
-		                android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
-		                android:enabled="false"
+
+                    <Button
+                        android:id="@+id/button_write_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dip"
+                        android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:enabled="false"
                         android:onClick="onWrite"
-		                android:text="Write" />
+                        android:text="Write" />
                 {%- endif -%}
-
                 {%- if notify_supported -%}
-		            <Button
-		                android:id="@+id/button_notify_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:paddingLeft="20dip"
-		                android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
-		                android:enabled="false"
-                    android:onClick="onNotify"
-		                android:text="Enable Notifications" />
-                {%- endif -%}
-                
-        	</LinearLayout>
 
+                    <Button
+                        android:id="@+id/button_notify_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dip"
+                        android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:enabled="false"
+                        android:onClick="onNotify"
+                        android:text="Enable Notifications" />
+                {%- endif -%}
+                {%- if indicate_supported -%}
+
+                    <Button
+                        android:id="@+id/button_indicate_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dip"
+                        android:tag="gatt_op_{{service.UUID | Remove:"-"}}_{{characteristic.UUID | Remove:"-"}}"
+                        android:enabled="false"
+                        android:onClick="onIndicate"
+                        android:text="Enable Indications" />
+                {%- endif -%}
+            </LinearLayout>
   {%- endif -%}
-        	
         </LinearLayout>
-        
-        	  {%- endfor -%}
-	
+              {%- endfor -%}
     </LinearLayout>
 {%- endfor -%}
 </LinearLayout>

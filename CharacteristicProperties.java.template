@@ -4,7 +4,7 @@ import android.util.Log;
 /**
  * Created by mwoolley on 16/02/2015.
  */
- 
+
 public class CharacteristicProperties {
 
     private String service_uuid;
@@ -13,6 +13,7 @@ public class CharacteristicProperties {
     private boolean supports_broadcast=false;
     private boolean supports_indicate=false;
     private boolean supports_notify=false;
+    private boolean supports_indication=false;
     private boolean supports_read=false;
     private boolean supports_reliable_write=false;
     private boolean supports_signed_write=false;
@@ -27,13 +28,21 @@ public class CharacteristicProperties {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         CharacteristicProperties that = (CharacteristicProperties) o;
 
-        if (!characteristic_uuid.equals(that.characteristic_uuid)) return false;
-        if (!service_uuid.equals(that.service_uuid)) return false;
+        if (!characteristic_uuid.equals(that.characteristic_uuid)) {
+            return false;
+        }
+        if (!service_uuid.equals(that.service_uuid)) {
+            return false;
+        }
 
         return true;
     }
@@ -83,6 +92,14 @@ public class CharacteristicProperties {
 
     public void setSupports_notify(boolean supports_notify) {
         this.supports_notify = supports_notify;
+    }
+
+    public boolean isSupports_indication() {
+        return supports_indication;
+    }
+
+    public void setSupports_indication(boolean supports_indication) {
+        this.supports_indication = supports_indication;
     }
 
     public boolean isSupports_read() {
