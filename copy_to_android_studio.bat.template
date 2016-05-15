@@ -1,0 +1,33 @@
+rem specify the absolute path to your Android Studio project as the first argument
+rem e.g. C:\workspaces\AndroidstudioProjects\BdsGeneratedClient
+
+rem For example:
+rem copy_to_android_studio.bat C:\workspaces\AndroidstudioProjects\BdsGeneratedClient
+
+mkdir %1\app\src\main\res\layout
+mkdir %1\app\src\main\res\mipmap-hdpi
+mkdir %1\app\src\main\res\mipmap-mdpi
+mkdir %1\app\src\main\res\mipmap-xhdpi
+mkdir %1\app\src\main\res\mipmap-xxhdpi
+mkdir %1\app\src\main\res\mipmap-xxxhdpi
+mkdir %1\app\src\main\java\{{CustomNameSpace}}
+
+@echo Copying java files to %1\app\src\main\java\{{CustomNameSpace}}
+
+copy *.java %1\app\src\main\java\{{CustomNameSpace}}
+
+@echo copying manifest to %1\app\src\main
+copy AndroidManifest.xml %1\app\src\main
+
+@echo copying resources to sub-directories of %1\app\src\main\res\
+copy strings.xml %1\app\src\main\res\values
+copy activity_peripheral_control.xml %1\app\src\main\res\layout
+copy border.xml %1\app\src\main\res\drawable
+copy activity_main.xml %1\app\src\main\res\layout
+copy list_row.xml %1\app\src\main\res\layout
+copy ic_launcher.png %1\app\src\main\res\mipmap-hdpi
+copy ic_launcher.png %1\app\src\main\res\mipmap-mdpi
+copy ic_launcher.png %1\app\src\main\res\mipmap-xhdpi
+copy ic_launcher.png %1\app\src\main\res\mipmap-xxhdpi
+copy ic_launcher.png %1\app\src\main\res\mipmap-xxxhdpi
+

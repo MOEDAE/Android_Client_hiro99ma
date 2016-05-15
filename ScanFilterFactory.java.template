@@ -1,0 +1,30 @@
+package {{CustomNameSpace}};
+
+import android.bluetooth.le.ScanFilter;
+
+/**
+ * Created by mwoolley on 20/11/2015.
+ */
+public class ScanFilterFactory {
+    private static ScanFilterFactory instance;
+
+    private ScanFilterFactory() {
+
+    }
+
+    public static synchronized ScanFilterFactory getInstance() {
+        if (instance == null) {
+            instance = new ScanFilterFactory();
+        }
+        return instance;
+    }
+
+    public ScanFilter getScanFilter() {
+{%- if GAPProperties.DeviceNameAdvertise == 'true' -%}          
+        String device_name = "{{GAPProperties.DeviceName}}";
+        return new ScanFilter.Builder().setDeviceName(device_name).build();
+{%- else -%}
+        return new ScanFilter.Builder().build();
+{%- endif -%}
+    }
+}
