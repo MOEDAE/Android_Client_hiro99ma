@@ -26,5 +26,22 @@ public class ScanFilterFactory {
 {%- else -%}
         return new ScanFilter.Builder().build();
 {%- endif -%}
+
+        //Device Address
+        //return new ScanFilter.Builder().setDeviceAddress("").build();
+
+        //Manufacturer Data
+        //return new ScanFilter.Builder().setManufacturerData(int manufacturerId, byte[] manufacturerData).build();
+        //return new ScanFilter.Builder().setManufacturerData(int manufacturerId, byte[] manufacturerData, byte[] manufacturerDataMask).build();
+
+        //Service Data
+        //ParcelUuid serviceUuid = new ParcelUuid(UUID.fromString("0000110B-0000-1000-8000-00805F9B34FB"));
+        //return new ScanFilter.Builder().setServiceData(serviceDataUuid, byte[] serviceData).build();
+        //return new ScanFilter.Builder().setServiceData(serviceDataUuid, byte[] serviceData, byte[] serviceDataMask).build();
+
+        //Service Uuid
+        //ParcelUuid serviceUuid = new ParcelUuid(UUID.fromString("0000110B-0000-1000-8000-00805F9B34FB"));
+        //return new ScanFilter.Builder().setServiceUuid(serviceUuid).build();
+        //return new ScanFilter.Builder().setServiceUuid(serviceUuid, ParcelUuid uuidMask).build();
     }
 }

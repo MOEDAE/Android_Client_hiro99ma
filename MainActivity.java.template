@@ -37,14 +37,14 @@ import android.util.Log;
 public class MainActivity extends Activity {
 
     private static final int REQUEST_LOCATION = 0;
-    private static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_COARSE_LOCATION};
-    private static final long SCAN_TIMEOUT = 5000;
+    //private static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_COARSE_LOCATION};
+    //private static final long SCAN_TIMEOUT = 5000;
 
     private BluetoothAdapter mBluetoothAdapter = null;
     private BluetoothLeScanner scanner = null;
     private boolean permissions_granted=false;
     private boolean mScanning = false;
-    private Handler mHandler = new Handler();
+    //private Handler mHandler = new Handler();
     private ListAdapter mLeDeviceListAdapter;
 
 

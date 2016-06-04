@@ -12,7 +12,7 @@ public class Utility {
         }
         if (uuid.length() == 32) {
             normalised_128_bit_uuid = uuid.substring(0,8) + "-"
-                    + uuid.substring(8,12) + "-"
+                    + uuid.substring( 8,12) + "-"
                     + uuid.substring(12,16) + "-"
                     + uuid.substring(16,20) + "-"
                     + uuid.substring(20,32);
@@ -39,7 +39,7 @@ public class Utility {
     }
 
     public static byte[] getByteArrayFromHexString(String hex_string) {
-     String hex = hex_string.replace(" ","");
+     String hex = hex_string.replace(" ", "");
      hex = hex.toUpperCase();
 
         byte[] bytes = new byte[hex.length() / 2];
@@ -49,7 +49,7 @@ public class Utility {
             String h1 = hex.substring(i, i + 1);
             String h2 = hex.substring(i + 1, i + 2);
             try {
-                int b = (Integer.valueOf(h1, 16).intValue() * 16) + (Integer.valueOf(h2, 16).intValue());
+                int b = (Integer.valueOf(h1, 16) * 16) + (Integer.valueOf(h2, 16));
                 bytes[j++] = (byte) b;
                 i = i + 2;
             } catch (NumberFormatException e) {
@@ -65,12 +65,12 @@ public class Utility {
         if (bytes == null) {
             return "";
         }
-        int l = bytes.length;
-        StringBuffer hex = new StringBuffer();
-        for (int i = 0; i < l; i++) {
-            if ((bytes[i] >= 0) & (bytes[i] < 16))
+        StringBuilder hex = new StringBuilder();
+        for (byte bt : bytes) {
+            if ((bt >= 0) && (bt < 16)) {
                 hex.append("0");
-            hex.append(Integer.toString(bytes[i] & 0xff, 16).toUpperCase());
+            }
+            hex.append(Integer.toString(bt & 0xff, 16).toUpperCase());
         }
         return hex.toString();
     }
@@ -85,8 +85,8 @@ public class Utility {
             System.out.println("isValidHex: not even number of chars");
             return false;
         }
-        for (int i=0;i<len;i++) {
-            if (!HEX_CHARS.contains(hex.substring(i,i+1))) {
+        for (int i = 0; i < len; i++) {
+            if (!HEX_CHARS.contains(hex.substring(i, i + 1))) {
                 return false;
             }
         }
