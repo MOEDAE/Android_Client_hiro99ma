@@ -1,5 +1,4 @@
 package {{CustomNameSpace}};
-import android.util.Log;
 
 /**
  * Created by mwoolley on 16/02/2015.
@@ -10,16 +9,16 @@ public class CharacteristicProperties {
     private String service_uuid;
     private String characteristic_uuid;
 
-    private boolean supports_broadcast=false;
-    private boolean supports_indicate=false;
-    private boolean supports_notify=false;
-    private boolean supports_indication=false;
-    private boolean supports_read=false;
-    private boolean supports_reliable_write=false;
-    private boolean supports_signed_write=false;
-    private boolean supports_writable_auxiliaries=false;
-    private boolean supports_write=false;
-    private boolean supports_write_without_response=false;
+    private boolean supports_broadcast = false;
+    private boolean supports_indicate = false;
+    private boolean supports_notify = false;
+    private boolean supports_indication = false;
+    private boolean supports_read = false;
+    private boolean supports_reliable_write = false;
+    private boolean supports_signed_write = false;
+    private boolean supports_writable_auxiliaries = false;
+    private boolean supports_write = false;
+    private boolean supports_write_without_response = false;
 
     public CharacteristicProperties(String service_uuid, String characteristic_uuid) {
         this.service_uuid = service_uuid;
@@ -31,7 +30,7 @@ public class CharacteristicProperties {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if ((o == null) || (getClass() != o.getClass())) {
             return false;
         }
 

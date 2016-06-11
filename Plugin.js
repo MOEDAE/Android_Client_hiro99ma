@@ -33,19 +33,26 @@ function RunPlugin(profiledata)
         var uniqueUUIDItem = profiledata.UniqueUUIDItems[c];
 		var uuid_name = uniqueUUIDItem.Name.toUpperCase();
 		uuid_name = uuid_name.replace(/ /g, '_');
+        var uuid128 = uniqueUUIDItem.UUID;
+        if (uuid128.length == 16*2) {
+            //"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx"
+            uuid128 = uuid128.substring(0, 8) + "-" + uuid128.substring(8, 12) + "-" + uuid128.substring(12, 16) + "-" + uuid128.substring(16, 20) + "-" + uuid128.substring(20, 32);
+        }
         if (uniqueUUIDItem.Type.indexOf(".characteristic.") > 0) {
+            log("Char: " + uuid128);
 			characteristic_constants = characteristic_constants + '    public static final String ' +
 									   uuid_name +
 									   '_CHARACTERISTIC_UUID = "' +
-			                           uniqueUUIDItem.UUID.toUpperCase() +
+			                           uuid128.toUpperCase() +
 									   '";' +
 									   '\n';
 		} else {
 			if (uniqueUUIDItem.Type.indexOf(".service.") > 0) {
-			service_constants = service_constants + '    public static final String ' +
+                log("Serv: " + uuid128);
+			    service_constants = service_constants + '    public static final String ' +
 									   uuid_name +
 									   '_SERVICE_UUID = "' +
-			                           uniqueUUIDItem.UUID.toUpperCase() +
+			                           uuid128.toUpperCase() +
 									   '";' +
 									   '\n';
 			}

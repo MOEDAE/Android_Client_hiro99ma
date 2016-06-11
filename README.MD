@@ -6,6 +6,13 @@
 * 改行コードをLF
 * 空行をなるべく削除
 
+## 注意点
+
+* NotificationのみやIndicationのみのCharacteristicを作ると、対応するEditTextが生成されないためエラーになる  
+	とりあえずRead属性を付けるか、手動で修正するかで対応する
+* CharacteristicのUUIDを16bitにしていると、生成する文字列の一部が16bitになり、128bit-UUIDしか内部で対応していないため実行時にうまくUUIDが生成できなくなる  
+	128bitにして保存することで対応する
+
 ### Author: Martin Woolley, Bluetooth SIG - Twitter: @bluetooth_mdw
 
 #### Version: 1.1.1

@@ -40,6 +40,7 @@ public class PeripheralControlActivity extends Activity {
     private String mDeviceAddress;
     private BleAdapterService mBluetoothLeService;
     private Timer mTimer;
+    private static final String TAG = "BDS:PerhCtlActivity";
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -207,7 +208,7 @@ public class PeripheralControlActivity extends Activity {
             showMsg("Error:Notifications Button not found");
         }
         String text = button_view.getText().toString();
-        Log.d(Constants.TAG, "text=" + text);
+        Log.d(TAG, "text=" + text);
         boolean state = text.startsWith("Enable");
         CharacteristicProperties char_props = new CharacteristicProperties(service_uuid, characteristic_uuid);
         int char_props_inx = characteristic_properties.indexOf(char_props);
@@ -244,7 +245,7 @@ public class PeripheralControlActivity extends Activity {
             showMsg("Error:Indications Button not found");
         }
         String text = button_view.getText().toString();
-        Log.d(Constants.TAG, "text=" + text);
+        Log.d(TAG, "text=" + text);
         boolean state = text.startsWith("Enable");
         CharacteristicProperties char_props = new CharacteristicProperties(service_uuid, characteristic_uuid);
         int char_props_inx = characteristic_properties.indexOf(char_props);
@@ -297,53 +298,53 @@ public class PeripheralControlActivity extends Activity {
                 disableGattOpButtons();
                 break;
             case BleAdapterService.GATT_SERVICES_DISCOVERED:
-                Log.d(Constants.TAG, "Services discovered");
+                Log.d(TAG, "Services discovered");
                 // start off the rssi reading timer
                 PeripheralControlActivity.this.startReadRssiTimer();
                 break;
             case BleAdapterService.GATT_CHARACTERISTIC_READ:
-                Log.d(Constants.TAG, "Handler received characteristic read result");
+                Log.d(TAG, "Handler received characteristic read result");
                 bundle = msg.getData();
                 service_uuid = bundle.getString(BleAdapterService.PARCEL_SERVICE_UUID);
                 characteristic_uuid = bundle.getString(BleAdapterService.PARCEL_CHARACTERISTIC_UUID);
-                Log.d(Constants.TAG, "Handler processing characteristic " + characteristic_uuid + " of " + service_uuid);
+                Log.d(TAG, "Handler processing characteristic " + characteristic_uuid + " of " + service_uuid);
                 b = bundle.getByteArray(BleAdapterService.PARCEL_VALUE);
-                Log.d(Constants.TAG, "Value=" + Utility.byteArrayAsHexString(b));
+                Log.d(TAG, "Value=" + Utility.byteArrayAsHexString(b));
                 value_text = (TextView) findViewByUUIDs(VIEW_TYPE_TEXT_VIEW, service_uuid, characteristic_uuid);
                 if (value_text != null) {
-                    Log.d(Constants.TAG, "Handler found TextView for characteristic value");
+                    Log.d(TAG, "Handler found TextView for characteristic value");
                     value_text.setText(Utility.byteArrayAsHexString(b));
                 }
                 enableGattOpButtons();
                 break;
             case BleAdapterService.GATT_CHARACTERISTIC_WRITTEN:
-                Log.d(Constants.TAG, "Handler received characteristic written result");
+                Log.d(TAG, "Handler received characteristic written result");
                 bundle = msg.getData();
                 service_uuid = bundle.getString(BleAdapterService.PARCEL_SERVICE_UUID);
                 characteristic_uuid = bundle.getString(BleAdapterService.PARCEL_CHARACTERISTIC_UUID);
-                Log.d(Constants.TAG, "characteristic " + characteristic_uuid + " of " + service_uuid+" written OK");
+                Log.d(TAG, "characteristic " + characteristic_uuid + " of " + service_uuid+" written OK");
                 enableGattOpButtons();
                 break;
             case BleAdapterService.GATT_DESCRIPTOR_WRITTEN:
-                Log.d(Constants.TAG, "Handler received descriptor written result");
+                Log.d(TAG, "Handler received descriptor written result");
                 bundle = msg.getData();
                 service_uuid = bundle.getString(BleAdapterService.PARCEL_SERVICE_UUID);
                 characteristic_uuid = bundle.getString(BleAdapterService.PARCEL_CHARACTERISTIC_UUID);
                 descriptor_uuid = bundle.getString(BleAdapterService.PARCEL_DESCRIPTOR_UUID);
-                Log.d(Constants.TAG, "descriptor " + descriptor_uuid + " of " + "characteristic " + characteristic_uuid + " of " + service_uuid+" written OK");
+                Log.d(TAG, "descriptor " + descriptor_uuid + " of " + "characteristic " + characteristic_uuid + " of " + service_uuid+" written OK");
                 enableGattOpButtons();
                 break;
             case BleAdapterService.NOTIFICATION_RECEIVED:
-                Log.d(Constants.TAG, "Handler received notification");
+                Log.d(TAG, "Handler received notification");
                 bundle = msg.getData();
                 service_uuid = bundle.getString(BleAdapterService.PARCEL_SERVICE_UUID);
                 characteristic_uuid = bundle.getString(BleAdapterService.PARCEL_CHARACTERISTIC_UUID);
-                Log.d(Constants.TAG, "Handler processing characteristic " + characteristic_uuid + " of " + service_uuid);
+                Log.d(TAG, "Handler processing characteristic " + characteristic_uuid + " of " + service_uuid);
                 b = bundle.getByteArray(BleAdapterService.PARCEL_VALUE);
-                Log.d(Constants.TAG, "Value=" + Utility.byteArrayAsHexString(b));
+                Log.d(TAG, "Value=" + Utility.byteArrayAsHexString(b));
                 value_text = (TextView) findViewByUUIDs(VIEW_TYPE_TEXT_VIEW, service_uuid, characteristic_uuid);
                 if (value_text != null) {
-                    Log.d(Constants.TAG, "Handler found TextView for characteristic value");
+                    Log.d(TAG, "Handler found TextView for characteristic value");
                     value_text.setText(Utility.byteArrayAsHexString(b));
                 }
                 break;
@@ -390,7 +391,7 @@ public class PeripheralControlActivity extends Activity {
     }
 
     private void showMsg(String msg) {
-        Log.d(Constants.TAG, msg);
+        Log.d(TAG, msg);
         ((TextView) PeripheralControlActivity.this.findViewById(R.id.msgTextView)).setText(msg);
     }
 
