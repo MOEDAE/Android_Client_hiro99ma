@@ -143,7 +143,7 @@ public class BleAdapterService extends Service {
                 sendConsoleMessage("Descriptor " + descriptor.getUuid().toString() + " written OK");
                 Bundle bundle = new Bundle();
                 bundle.putString(PARCEL_DESCRIPTOR_UUID, descriptor.getUuid().toString());
-                bundle.putString(PARCEL_CHARACTERISTIC_UUID, descriptor.getCharacteristic().getService().getUuid().toString());
+                bundle.putString(PARCEL_CHARACTERISTIC_UUID, descriptor.getCharacteristic().getUuid().toString());
                 bundle.putString(PARCEL_SERVICE_UUID, descriptor.getCharacteristic().getService().getUuid().toString());
                 bundle.putByteArray(PARCEL_VALUE, descriptor.getValue());
                 Message msg = Message.obtain(mActivityHandler, GATT_DESCRIPTOR_WRITTEN);
